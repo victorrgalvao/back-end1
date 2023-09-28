@@ -1,17 +1,16 @@
 
 
 export class UpdateUsuarioDto {
-   
-    login:string;
-    password:string;
-     
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    id: number;
+    login: string;
+    password: string;
+
+}
+
+
+
+
+
+
+
+
