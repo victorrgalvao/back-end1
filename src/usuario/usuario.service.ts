@@ -1,11 +1,21 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { MovieDto } from 'src/dto/movieDto.dto';
 import { CreateUsuarioDto } from 'src/dto/usuario.dto';
 import { UpdateUsuarioDto } from 'src/dto/usuarioUpdate.dto';
+import { FilmeService } from 'src/filme/filme.service';
+import { filmes } from '../filme/filme-data'
 
 @Injectable()
 export class UsuarioService {
   private readonly usuarios: CreateUsuarioDto[] = [];
 
+  constructor(private readonly filmeService: FilmeService) { }
+
+  getMovies() {
+   
+    console.log(filmes)
+    return filmes;
+  }
 
   findAll() {
     return this.usuarios;
@@ -37,24 +47,29 @@ export class UsuarioService {
     this.usuarios.splice(index, 1, updateUser);
   }
 
-  // addFavorite(userId: number, movieId: number) {
-  //   const user = this.usuarios.find((u) => u.id === userId);
-  //   if (!user) {
-  //     throw new NotFoundException('Usuario não encontrado');
-  //   }
+  addFavorite(userId: number, movieId: number) {
+    const user = this.usuarios.find((u) => u.id === userId);
+    if (!user) {
+      throw new NotFoundException('Usuario não encontrado');
+    }
 
-  //   const movieToAdd = this.movies.find((m) => m.id === movieId);
-  //   if (!movieToAdd) {
-  //     throw new NotFoundException('Movie not found');
-  //   }
+    const movieToAdd = filmes.find((m) => m.id === movieId);
+    if (!movieToAdd) {
+      throw new NotFoundException('Movie not found');
+    }
 
-  //   if (user.favorites.includes(movieId)) {
-  //     throw new Error('Movie already in favorites');
-  //   }
 
-  //   user.favorites.push(movieId);
-  //   return user;
-  // }
+    if (user.favoritos.some((fav) => fav.id === movieId)) {
+      throw new Error('Movie already in favorites');
+    }
+    const newFavorite: MovieDto = {
+      id: movieToAdd.id,
+      nome: movieToAdd.nome,
+      genero: movieToAdd.genero,
+    };
+    user.favoritos.push(newFavorite);
+    return user;
+  }
 }
 
 

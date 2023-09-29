@@ -1,41 +1,40 @@
-import { HttpStatus, Injectable,NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { MovieDto } from 'src/dto/movieDto.dto';
 import { MovieUpdateDto } from 'src/dto/movieUpdateDto.dto';
-
+import { filmes } from './filme-data';
 
 @Injectable()
 export class FilmeService {
-  private readonly filmes: MovieDto[] = [];
+  public readonly filmes: MovieDto[] = [];
   
+  getFilmes(): MovieDto[] {
+    return filmes;
+  }
 
   findAll() {
-    return this.filmes;
+    return filmes;
   }
-  cadastrar(filme: MovieDto) {
-    let movie = new MovieDto();
-    movie.id = filme.id;
-    movie.nome = filme.nome;
-    movie.genero = filme.genero;
-
-    this.filmes.push(filme)
-    return filme;
-
+  cadastrar(filme: MovieDto): MovieDto {
+    filmes.push(filme);
+    console.log(filme);
+    console.log(filmes);
+    return filme; // Retorna o filme adicionado
   }
   findById(id: number): MovieDto {
-    return this.filmes.find(filme => filme.id === id);
+    return filmes.find(filme => filme.id === id);
   }
   findIndexById(id: number): number {
-    return this.filmes.findIndex(filme => filme.id === id);
+    return filmes.findIndex(filme => filme.id === id);
   }
 
 
 
   deleteByIndex(index: number): void {
-    this.filmes.splice(index, 1);
+   filmes.splice(index, 1);
   }
 
   updateByIndex(index: number, updateMovie: MovieUpdateDto): void {
-    this.filmes.splice(index, 1, updateMovie);
+    filmes.splice(index, 1, updateMovie);
   }
 
   

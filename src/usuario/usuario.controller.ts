@@ -3,11 +3,16 @@ import { Response } from 'express';
 import { CreateUsuarioDto } from 'src/dto/usuario.dto';
 import { UpdateUsuarioDto } from 'src/dto/usuarioUpdate.dto';
 import { UsuarioService } from './usuario.service';
-// import { FavoriteDTO } from 'src/dto/addFavoriteMovieDto.dto';
+import { FavoriteDTO } from 'src/dto/addFavoriteMovieDto.dto';
 @Controller('usuario')
 export class UsuarioController {
 
     constructor(private readonly usuarioService: UsuarioService) { }
+
+@Get('filmes')
+listarFilmes(){
+    return this.usuarioService.getMovies();
+}
 
     @Get()
     findAll() {
@@ -29,20 +34,20 @@ export class UsuarioController {
         this.usuarioService.cadastrar(createUsuarioDto);
         res.status(HttpStatus.CREATED).json(createUsuarioDto);
     }
-    // @Post(':id/favorites')
-    // async addFavorite(
-    //   @Param('id', ParseIntPipe) userId: number,
-    //        @Body() addFavoriteDto: FavoriteDTO,
-    // //   @Param('movieId', ParseIntPipe) movieId: number
-    // ) {
-    //     const {movieId} = addFavoriteDto;
-    //   try {
-    //     const user = await this.usuarioService.addFavorite(userId ,movieId);
-    //     return { message: 'Movie added to favorites', user };
-    //   } catch (error) {
-    //     return { message: error.message };
-    //   }
-    // }
+    @Post(':id/favorites')
+    async addFavorite(
+      @Param('id', ParseIntPipe) userId: number,
+           @Body() addFavoriteDto: FavoriteDTO,
+    //   @Param('movieId', ParseIntPipe) movieId: number
+    ) {
+        const {movieId} = addFavoriteDto;
+      try {
+        const user =this.usuarioService.addFavorite(userId ,movieId);
+        return { message: 'Movie added to favorites', user };
+      } catch (error) {
+        return { message: error.message };
+      }
+    }
 
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
