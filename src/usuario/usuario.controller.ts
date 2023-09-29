@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { CreateUsuarioDto } from 'src/dto/usuario.dto';
 import { UpdateUsuarioDto } from 'src/dto/usuarioUpdate.dto';
 import { UsuarioService } from './usuario.service';
+// import { FavoriteDTO } from 'src/dto/addFavoriteMovieDto.dto';
 @Controller('usuario')
 export class UsuarioController {
 
@@ -28,13 +29,15 @@ export class UsuarioController {
         this.usuarioService.cadastrar(createUsuarioDto);
         res.status(HttpStatus.CREATED).json(createUsuarioDto);
     }
-    // @Post(':id/favorites/:movieId')
+    // @Post(':id/favorites')
     // async addFavorite(
     //   @Param('id', ParseIntPipe) userId: number,
-    //   @Param('movieId', ParseIntPipe) movieId: number
+    //        @Body() addFavoriteDto: FavoriteDTO,
+    // //   @Param('movieId', ParseIntPipe) movieId: number
     // ) {
+    //     const {movieId} = addFavoriteDto;
     //   try {
-    //     const user = await this.userService.addFavorite(userId, movieId);
+    //     const user = await this.usuarioService.addFavorite(userId ,movieId);
     //     return { message: 'Movie added to favorites', user };
     //   } catch (error) {
     //     return { message: error.message };
@@ -46,7 +49,7 @@ export class UsuarioController {
         const indexUsuarioEncontrado = this.usuarioService.findIndexById(id);
         if (indexUsuarioEncontrado >= 0) {
             this.usuarioService.deleteByIndex(indexUsuarioEncontrado);
-            res.status(HttpStatus.OK).json({messagem:"usuario deletado"});
+            res.status(HttpStatus.OK).json({ messagem: "usuario deletado" });
         } else {
             res.status(HttpStatus.NOT_FOUND).json({ messagem: 'usuario não encontrado' });
         }
@@ -58,13 +61,13 @@ export class UsuarioController {
         if (indexUsuarioEncontrado >= 0) {
             // Obtenha o gato existente
             const usuarioExistente = this.usuarioService.findById(id);
-    
+
             // Atualize apenas os campos do gato existente que estão definidos em 'updateCat'
             const updatedUsuario = { ...usuarioExistente, ...usuarioUpdate };
-            
+
             // Atualize o gato no array de gatos do serviço
             this.usuarioService.updateByIndex(indexUsuarioEncontrado, updatedUsuario);
-    
+
             res.status(HttpStatus.NO_CONTENT).send();
         } else {
             res.status(HttpStatus.NOT_FOUND).send();
