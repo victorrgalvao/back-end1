@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Res, Delete, Param, ParseIntPipe, Put, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, Delete, Param, ParseIntPipe, Put, HttpStatus, Patch } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateUsuarioDto } from 'src/dto/usuario.dto';
 import { UpdateUsuarioDto } from 'src/dto/usuarioUpdate.dto';
@@ -60,7 +60,7 @@ listarFilmes(){
         }
     }
 
-    @Put(':id')
+    @Patch(':id')
     update(@Param('id', ParseIntPipe) id: number, @Body() usuarioUpdate: UpdateUsuarioDto, @Res() res: Response) {
         const indexUsuarioEncontrado = this.usuarioService.findIndexById(id);
         if (indexUsuarioEncontrado >= 0) {
